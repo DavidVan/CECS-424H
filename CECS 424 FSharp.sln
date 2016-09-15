@@ -9,6 +9,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Homework 1", "Homework1\Hom
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Lab 1 - Imperator Furiosharp", "Lab 1 - Imperator Furiosharp\Lab 1 - Imperator Furiosharp.fsproj", "{AB780F8F-8DE0-4439-8A8E-0C41F07C7F11}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Homework 2", "Homework 2\Homework 2.fsproj", "{91D1BA62-B090-4B05-89A8-428538EA16DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{AB780F8F-8DE0-4439-8A8E-0C41F07C7F11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB780F8F-8DE0-4439-8A8E-0C41F07C7F11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB780F8F-8DE0-4439-8A8E-0C41F07C7F11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91D1BA62-B090-4B05-89A8-428538EA16DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91D1BA62-B090-4B05-89A8-428538EA16DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91D1BA62-B090-4B05-89A8-428538EA16DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91D1BA62-B090-4B05-89A8-428538EA16DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
