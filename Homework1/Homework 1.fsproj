@@ -8,7 +8,7 @@
     <ProjectGuid>e3cef834-f7c7-4882-85a2-2b586c2693ca</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>Homework1</RootNamespace>
-    <AssemblyName>Homework1</AssemblyName>
+    <AssemblyName>Homework_1</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFSharpCoreVersion>4.4.0.0</TargetFSharpCoreVersion>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <DocumentationFile>bin\Debug\Homework1.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Homework_1.XML</DocumentationFile>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
