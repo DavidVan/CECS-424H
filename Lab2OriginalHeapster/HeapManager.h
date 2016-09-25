@@ -23,5 +23,6 @@ void testCase3();
 void testCase4();
 void testCase5();
 void customTestCase1();
+void customTestCase2();
 
 #endif

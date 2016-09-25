@@ -3,7 +3,7 @@
 #include "HeapManager.h"
 
 int main() {
-    my_initialize_heap(1024);
+    my_initialize_heap(40);
     /*// Below is for testing purposes.
     printf("Memory location of block: %p\n", free_head);
     printf("Memory location of block size: %p\n", &free_head->block_size);
@@ -19,7 +19,8 @@ int main() {
     //testCase3();
     //testCase4();
     //testCase5();
-    //customTestCase1();
+    //customTestCase1(); // Use size 40
+    //customTestCase2(); // Use size 56
 }
 
 void my_initialize_heap(int size) {
@@ -203,7 +204,7 @@ void customTestCase1() { // Test backtracking when not splitting!
     struct Block *p3 = my_alloc(sizeof(int));
     printf("p3 Next: %p, p3 size: %d\n", (p3 - 1)->next_block, (p3 - 1)->block_size);
     printf("Head Address: %p, p3 Address: %p\n", free_head, p3);
-    //printf("Head Next: %p, Head Free: %d\n", free_head->next_block, free_head->block_size);
+    //printf("Head Next: %p, Head Free: %d\n", free_head->next_block, free_head->block_size); // This crashes
     printf("Freeing double...\n");
     my_free(p2);
     printf("Old buffer Location of double: %p, size: %d\n", p2, (p2 - 1)->block_size);
@@ -216,5 +217,40 @@ void customTestCase1() { // Test backtracking when not splitting!
     // Clean up remaining blocks.
     my_free(p1);
     printf("\n");
-    // Something going on with HEAD address...
+}
+
+void customTestCase2() {
+    printf("Custom Test Case 2:\n");
+    printf("Allocating first int...\n");
+    struct Block *p1 = my_alloc(sizeof(int));
+    printf("p1 Next: %p, p1 size: %d\n", (p1 - 1)->next_block, (p1 - 1)->block_size);
+    printf("Head Address: %p, p1 Address: %p\n", free_head, p1);
+    printf("Allocating first double...\n");
+    struct Block *p2 = my_alloc(sizeof(double));
+    printf("p2 Next: %p, p2 size: %d\n", (p2 - 1)->next_block, (p2 - 1)->block_size);
+    printf("Head Address: %p, p2 Address: %p\n", free_head, p2);
+    printf("Allocating second double...\n");
+    struct Block *p3 = my_alloc(sizeof(double));
+    printf("p3 Next: %p, p3 size: %d\n", (p3 - 1)->next_block, (p3 - 1)->block_size);
+    printf("Head Address: %p, p3 Address: %p\n", free_head, p3);
+    printf("Allocating second int...\n");
+    struct Block *p4 = my_alloc(sizeof(int));
+    printf("p4 Next: %p, p4 size: %d\n", (p4 - 1)->next_block, (p4 - 1)->block_size);
+    printf("Head Address: %p, p4 Address: %p\n", free_head, p4);
+    //printf("Head Next: %p, Head Free: %d\n", free_head->next_block, free_head->block_size); // This crashes
+    printf("Freeing doubles...\n");
+    my_free(p2);
+    printf("Old buffer Location of double: %p, size: %d\n", p2, (p2 - 1)->block_size);
+    printf("Head location: %p, p2 location: %p, Head Next: %p, p2 next: %p\n", free_head, p2 - 1, free_head->next_block, (p2 - 1)->next_block);
+    my_free(p3);
+    printf("Old buffer Location of double: %p, size: %d\n", p3, (p3 - 1)->block_size);
+    printf("Head location: %p, p3 location: %p, Head Next: %p, p3 next: %p\n", free_head, p3 - 1, free_head->next_block, (p3 - 1)->next_block);
+    printf("Freeing second int...\n");
+    my_free(p4);
+    printf("Old buffer Location of second int: %p, size: %d\n", p4, (p4 - 1)->block_size);
+    void *p5 = my_alloc(sizeof(double));
+    my_free(p5);
+    // Clean up remaining blocks.
+    my_free(p1);
+    printf("\n");
 }
