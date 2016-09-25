@@ -3,7 +3,7 @@
 #include "HeapManager.h"
 
 int main() {
-    my_initialize_heap(40);
+    my_initialize_heap(1024);
     /*// Below is for testing purposes.
     printf("Memory location of block: %p\n", free_head);
     printf("Memory location of block size: %p\n", &free_head->block_size);
@@ -19,7 +19,7 @@ int main() {
     //testCase3();
     //testCase4();
     //testCase5();
-    customTestCase1();
+    //customTestCase1();
 }
 
 void my_initialize_heap(int size) {
@@ -58,12 +58,12 @@ void *my_alloc(int size) {
     printf("Print location... %p\n", currentBlock);
     printf("Print size... %d\n", currentBlock->block_size);
     // We found our block (according to first-fit heuristics). Should we split the block?
-    if (currentBlock->block_size > (size + BLOCK_SIZE)) { // Yes, split. We don't need to add VOID_PTR_SIZE because we don't allow allocation of size 0.
+    if (currentBlock->block_size > size) { // Yes, split. We don't need to add VOID_PTR_SIZE because we don't allow allocation of size 0. We also don't need to add BLOCK_SIZE because we account for that already.
         printf("Splitting!\n");
-        currentBlock->block_size = currentBlock->block_size - BLOCK_SIZE - size; // Subtract the requested size from the pool.
+        currentBlock->block_size = currentBlock->block_size - BLOCK_SIZE - size; // Subtract the overhead and requested size from the pool.
         int startLocation = currentBlock->block_size; // Already subtracted the overhead and size above!
         printf("Before split: %p\n", currentBlock);
-        currentBlock = ((char*)currentBlock) + startLocation; // Place new block at the end!
+        currentBlock = ((char*)currentBlock) + startLocation + BLOCK_SIZE; // Account for initial overhead and place new block at the end!
         printf("After split: %p\n", currentBlock);
         currentBlock->block_size = size; // Set the size.
         currentBlock->next_block = NULL; // Set the next block.
