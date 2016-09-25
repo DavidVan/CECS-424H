@@ -183,7 +183,7 @@ void testCase5() {
     printf("Buffer Location of int: %p, size: %d\n", p2, (p2 - 1)->block_size);
     printf("Freeing int array...\n");
     my_free(p1);
-    printf("Verifying int buffer location...\n");
+    printf("Verifying int buffer location and size...\n");
     printf("Buffer Location of int: %p, size: %d\n", p2, (p2 - 1)->block_size);
     printf("Freeing int...\n");
     my_free(p2);
