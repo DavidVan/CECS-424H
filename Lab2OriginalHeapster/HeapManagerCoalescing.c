@@ -79,15 +79,15 @@ void my_free(void *data) {
     // Should we coalesce or not?
     // Yes, coalesce.
     if (previous != NULL && header != NULL && (((char *)previous + BLOCK_SIZE + previous->block_size) == header || ((char *)header + BLOCK_SIZE + header->block_size) == next)) {
-        if (((char *)previous + BLOCK_SIZE + previous->block_size) == header) {
+        if (((char *)previous + BLOCK_SIZE + previous->block_size) == header) { // Stage 1: Merge left.
             previous->block_size += BLOCK_SIZE + header->block_size; // block_size only contains the data section's size... Take into account overhead!
-            if (((char *)previous + BLOCK_SIZE + previous->block_size) == next) {
+            if (((char *)previous + BLOCK_SIZE + previous->block_size) == next) { // Stage 2: Merge right.
                 previous->next_block = next->next_block;
                 previous->block_size += BLOCK_SIZE + next->block_size;
             }
             return;
         }
-        if (((char *)header + BLOCK_SIZE + header->block_size) == next) {
+        if (((char *)header + BLOCK_SIZE + header->block_size) == next) { // Stage 1: Merge right.
             header->block_size += BLOCK_SIZE + next->block_size;
             struct Block* temp = next->next_block;
             previous->next_block = header;
