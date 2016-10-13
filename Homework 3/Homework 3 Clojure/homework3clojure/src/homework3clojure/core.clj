@@ -1,4 +1,5 @@
-(ns homework3clojure.core)
+(ns homework3clojure.core
+  (:gen-class))
 
 (defn third [coll]
   (first (next (next coll))))
@@ -18,7 +19,7 @@
     (first coll)
     (get-at (next coll) (- i 1))))
 
-(defn main
+(defn -main
   [& args]
   (println (third (list 1 2 3)))
   (println (third (list 1 2)))
@@ -28,5 +29,3 @@
   (println (my-butlast (list)))
   (println (get-at (list 1 2 3 4) 3))
   (println (get-at (list) 2)))
-
-(main)
