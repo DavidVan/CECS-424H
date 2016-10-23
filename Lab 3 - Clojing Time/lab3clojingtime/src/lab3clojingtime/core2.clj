@@ -1,4 +1,4 @@
-(ns lab3clojingtime.core
+(ns lab3clojingtime.core2
   (:gen-class))
 
 (defn third [list]
@@ -12,14 +12,28 @@
 (defn same-variable? [form1 form2]
   (and (variable? form1) (variable? form2) (= form1 form2)))
 
+;; OLD VERSION
+;; True if the form represents a sum.
+;(defn sum? [form]
+;  (and (list? form) (= '+ (first form))))
+
 ;; True if the form represents a sum.
 (defn sum? [form]
-  (and (list? form) (= '+ (first form))))
+  (and (list? form) (= '+ (second form))))
 
 ;; OLD VERSION
 ;; Constructs a sum of a and b.
 ;(defn make-sum [a b]
 ;  (list '+ a b))
+
+;; OLD VERSION 2
+;; Constructs a sum of a and b.
+;(defn make-sum [a b]
+;  (cond
+;    (= 0 b) a
+;    (= 0 a) b
+;    (and (number? a) (number? b)) (+ a b)
+;    :else (list '+ a b)))
 
 ;; Constructs a sum of a and b.
 (defn make-sum [a b]
@@ -27,11 +41,16 @@
     (= 0 b) a
     (= 0 a) b
     (and (number? a) (number? b)) (+ a b)
-    :else (list '+ a b)))
+    :else (list a '+ b)))
+
+;; OLD VERSION
+;; Selects the addend (first value) of a sum.
+;(defn addend [sum]
+;  (second sum))
 
 ;; Selects the addend (first value) of a sum.
 (defn addend [sum]
-  (second sum))
+  (first sum))
 
 ;; Selects the augend (second value) of a sum.
 (defn augend [sum]
@@ -55,21 +74,37 @@
     :else (list '- a b)))
 
 ;; Selects the subtrahend (first value) of a difference.
-  (defn subtrahend [diff]
+(defn subtrahend [diff]
   (second diff))
 
 ;; Selects the minuend (second value) of a difference.
 (defn minuend [diff]
   (third diff))
 
+;; OLD VERSION
+;; True if the form represents a product.
+;(defn prod? [form]
+;  (and (list? form) (= '* (first form))))
+
 ;; True if the form represents a product.
 (defn prod? [form]
-  (and (list? form) (= '* (first form))))
+  (and (list? form) (= '* (second form))))
 
-;; OLD VERSION
+;; OLD VERSION 1
 ;; Constructs a product of a and b.
 ;(defn make-prod [a b]
 ;  (list '* a b))
+
+;; OLD VERSION 2
+;; Constructs a product of a and b.
+;(defn make-prod [a b]
+;  (cond
+;    (= a 0) 0
+;    (= b 0) 0
+;    (= a 1) b
+;    (= b 1) a
+;    (and (number? a) (number? b)) (* a b)
+;    :else (list '* a b)))
 
 ;; Constructs a product of a and b.
 (defn make-prod [a b]
@@ -79,11 +114,16 @@
     (= a 1) b
     (= b 1) a
     (and (number? a) (number? b)) (* a b)
-    :else (list '* a b)))
+    :else (list a '* b)))
+
+;; OLD VERSION
+;; Selects the multiplier (first value) of a product.
+;(defn multiplier [prod]
+;  (second prod))
 
 ;; Selects the multiplier (first value) of a product.
 (defn multiplier [prod]
-  (second prod))
+  (first prod))
 
 ;; Selects the multiplicand (second value) of a product.
 (defn multiplicand [prod]
@@ -158,6 +198,22 @@
 (defn log-of [antilog]
   (second antilog))
 
+;; True if the form represents an exponential.
+(defn exp? [form]
+  (and (list? form) (= 'exp (first form))))
+
+;; Constructs an exponential of a and b.
+(defn make-exp [a b]
+  (list 'exp a b))
+
+;; Selects the base (first value) of an exponential.
+(defn exp-base [exp]
+  (second exp))
+
+;; Selects the exponent (second value) of an exponential.
+(defn exp-exponent [exp]
+  (third exp))
+
 ;; True if the form represents a sin.
 (defn sin? [form]
   (and (list? form) (= 'sin (first form))))
@@ -178,9 +234,33 @@
 (defn tan? [form]
   (and (list? form) (= 'tan (first form))))
 
+;; Constructs a tan of a.
+(defn make-tan [a]
+  (list 'tan a))
+
+;; True if the form represents a sec.
+(defn sec? [form]
+  (and (list? form) (= 'sec (first form))))
+
 ;; Constructs a sec of a.
 (defn make-sec [a]
   (list 'sec a))
+
+;; True if the form represents a csc.
+(defn csc? [form]
+  (and (list? form) (= 'csc (first form))))
+
+;; Constructs a csc of a.
+(defn make-csc [a]
+  (list 'csc a))
+
+;; True if the form represents a cot.
+(defn cot? [form]
+  (and (list? form) (= 'cot (first form))))
+
+;; Constructs a cot of a.
+(defn make-cot [a]
+  (list 'cot a))
 
 ;; Selects the angle of a trigonometric function.
 (defn angle [trig]
@@ -212,7 +292,7 @@
                              (derivative (base form) var))
     ; Quotient rule
     (quot? form) (make-quot (make-diff (make-prod (divisor form) (derivative (dividend form) var))
-                                      (make-prod (dividend form) (derivative (divisor form) var)))
+                                       (make-prod (dividend form) (derivative (divisor form) var)))
                             (make-power (divisor form) 2))
     ; Natural logarithm
     (ln? form) (make-quot (derivative (log-of form) var) (log-of form))
@@ -221,7 +301,18 @@
     ; Cos
     (cos? form) (make-prod -1 (make-prod (make-sin (angle form)) (derivative (angle form) var)))
     ; Tan
-    (tan? form) (make-prod (make-power (make-sec (angle form)) 2) (derivative (angle form) var))))
+    (tan? form) (make-prod (make-power (make-sec (angle form)) 2) (derivative (angle form) var))
+    ; Sec
+    (sec? form) (make-prod (make-prod (make-sec (angle form)) (make-tan (angle form)))
+                           (derivative (angle form) var))
+    ; Csc
+    (csc? form) (make-prod -1 (make-prod (make-prod (make-csc (angle form)) (make-cot (angle form)))
+                                         (derivative (angle form) var)))
+    ; Cot
+    (cot? form) (make-prod -1 (make-prod (make-power (make-csc (angle form)) 2) (derivative (angle form) var)))
+    ; Exp
+    (exp? form) (make-prod (make-prod (make-exp (exp-base form) (exp-exponent form)) (make-ln (exp-base form)))
+                           (derivative (exp-exponent form) var))))
 
 (defn -main
   [& args]
@@ -289,5 +380,9 @@
   (println (make-ln -1))
   (println (make-ln 'x))
   (println (make-ln 'y))
+  (println "Exponential Test")
+  (println (derivative '(exp 10 (* 3 x)) 'x))
+  (println (derivative '(exp (Math/exp 1) (* 3 x)) 'x))
   (println (derivative '(+ (* x x) 5) 'x))
+  (println (derivative '((** x 2) + 5) 'x))
   )
