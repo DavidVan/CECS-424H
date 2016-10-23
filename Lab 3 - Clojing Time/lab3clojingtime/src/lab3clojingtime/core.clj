@@ -16,9 +16,18 @@
 (defn sum? [form]
   (and (list? form) (= '+ (first form))))
 
+;; OLD VERSION
+;; Constructs a sum of a and b.
+;(defn make-sum [a b]
+;  (list '+ a b))
+
 ;; Constructs a sum of a and b.
 (defn make-sum [a b]
-  (list '+ a b))
+  (cond
+    (= 0 b) a
+    (= 0 a) b
+    (and (number? a) (number? b)) (+ a b)
+    :else (list '+ a b)))
 
 ;; Selects the addend (first value) of a sum.
 (defn addend [sum]
@@ -32,9 +41,18 @@
 (defn diff? [form]
   (and (list? form) (= '- (first form))))
 
+;; OLD VERSION
+;; Constructs a difference of a and b.
+;(defn make-diff [a b]
+;  (list '- a b))
+
 ;; Constructs a difference of a and b.
 (defn make-diff [a b]
-  (list '- a b))
+  (cond
+    (= a 0) (list '- b)
+    (= b 0) a
+    (and (number? a) (number? b)) (- a b)
+    :else (list '- a b)))
 
 ;; Selects the subtrahend (first value) of a difference.
   (defn subtrahend [diff]
@@ -48,9 +66,20 @@
 (defn prod? [form]
   (and (list? form) (= '* (first form))))
 
+;; OLD VERSION
+;; Constructs a product of a and b.
+;(defn make-prod [a b]
+;  (list '* a b))
+
 ;; Constructs a product of a and b.
 (defn make-prod [a b]
-  (list '* a b))
+  (cond
+    (= a 0) 0
+    (= b 0) 0
+    (= a 1) b
+    (= b 1) a
+    (and (number? a) (number? b)) (* a b)
+    :else (list '* a b)))
 
 ;; Selects the multiplier (first value) of a product.
 (defn multiplier [prod]
@@ -64,9 +93,18 @@
 (defn quot? [form]
   (and (list? form) (= '/ (first form))))
 
+;; OLD VERSION
+;; Constructs a quotient of a and b.
+;(defn make-quot [a b]
+;  (list '/ a b))
+
 ;; Constructs a quotient of a and b.
 (defn make-quot [a b]
-  (list '/ a b))
+  (cond
+    (= a 0) 0
+    (= b 1) a
+    (and (number? a) (number? b)) (/ a b)
+    :else (list '/ a b)))
 
 ;; Selects the dividend (first value) of a quotient.
 (defn dividend [quot]
@@ -80,9 +118,18 @@
 (defn power? [form]
   (and (list? form) (= '** (first form))))
 
+;; OLD VERSION
+;; Constructs a power of a and b.
+;(defn make-power [a b]
+;  (list '** a b))
+
 ;; Constructs a power of a and b.
 (defn make-power [a b]
-  (list '** a b))
+  (cond
+    (= b 0) 1
+    (= b 1) a
+    (and (number? a) (number? b)) (Math/pow a b)
+    :else (list '** a b)))
 
 ;; Selects the base (first value) of a power.
 (defn base [power]
@@ -96,9 +143,16 @@
 (defn ln? [form]
   (and (list? form) (= 'ln (first form))))
 
+;; OLD VERSION
+;; Constructs a ln of a.
+;(defn make-ln [a]
+;  (list 'ln a))
+
 ;; Constructs a ln of a.
 (defn make-ln [a]
-  (list 'ln a))
+  (cond
+    (number? a) (Math/log a)
+    :else (list 'ln a)))
 
 ;; Selects the antilogarithm of a logarithm.
 (defn log-of [antilog]
@@ -124,33 +178,9 @@
 (defn tan? [form]
   (and (list? form) (= 'tan (first form))))
 
-;; Constructs a tan of a.
-(defn make-tan [a]
-  (list 'tan a))
-
-;; True if the form represents a sec.
-(defn sec? [form]
-  (and (list? form) (= 'sec (first form))))
-
 ;; Constructs a sec of a.
 (defn make-sec [a]
   (list 'sec a))
-
-;; True if the form represents a csc.
-(defn csc? [form]
-  (and (list? form) (= 'csc (first form))))
-
-;; Constructs a csc of a.
-(defn make-csc [a]
-  (list 'csc a))
-
-;; True if the form represents a cot.
-(defn cot? [form]
-  (and (list? form) (= 'cot (first form))))
-
-;; Constructs a cot of a.
-(defn make-cot [a]
-  (list 'cot a))
 
 ;; Selects the angle of a trigonometric function.
 (defn angle [trig]
@@ -192,14 +222,6 @@
     (cos? form) (make-prod -1 (make-prod (make-sin (angle form)) (derivative (angle form) var)))
     ; Tan
     (tan? form) (make-prod (make-power (make-sec (angle form)) 2) (derivative (angle form) var))
-    ; Sec
-    (sec? form) (make-prod (make-prod (make-sec (angle form)) (make-tan (angle form)))
-                           (derivative (angle form) var))
-    ; Csc
-    (csc? form) (make-prod -1 (make-prod (make-prod (make-csc (angle form)) (make-cot (angle form)))
-                                         (derivative (angle form) var)))
-    ; Cot
-    (cot? form) (make-prod -1 (make-prod (make-power (make-csc (angle form)) 2) (derivative (angle form) var)))
     ))
 
 (defn -main
@@ -215,4 +237,58 @@
   (println (derivative '(tan x) 'x))
   (println (derivative '(sec x) 'x))
   (println (derivative '(csc x) 'x))
-  (println (derivative '(cot x) 'x)))
+  (println (derivative '(cot x) 'x))
+  (println "Sum Test")
+  (println (make-sum 0 5))
+  (println (make-sum 5 0))
+  (println (make-sum 1 5))
+  (println (make-sum 5 1))
+  (println (make-sum 5 5))
+  (println (make-sum 'x 5))
+  (println (make-sum 5 'x))
+  (println (make-sum 'x 'y))
+  (println "Diff Test")
+  (println (make-diff 0 5))
+  (println (make-diff 5 0))
+  (println (make-diff 1 5))
+  (println (make-diff 5 1))
+  (println (make-diff 5 5))
+  (println (make-diff 'x 5))
+  (println (make-diff 5 'x))
+  (println (make-diff 'x 'y))
+  (println "Prod Test")
+  (println (make-prod 0 5))
+  (println (make-prod 5 0))
+  (println (make-prod 1 5))
+  (println (make-prod 5 1))
+  (println (make-prod 5 5))
+  (println (make-prod 'x 5))
+  (println (make-prod 5 'x))
+  (println (make-prod 'x 'y))
+  (println "Quot Test")
+  (println (make-quot 0 5))
+  ;(println (make-quot 5 0)) ; Should crash.
+  (println (make-quot 1 5))
+  (println (make-quot 5 1))
+  (println (make-quot 5 5))
+  (println (make-quot 'x 5))
+  (println (make-quot 5 'x))
+  (println (make-quot 'x 'y))
+  (println "Power Test")
+  (println (make-power 0 5))
+  (println (make-power 5 0))
+  (println (make-power 1 5))
+  (println (make-power 5 1))
+  (println (make-power 5 5))
+  (println (make-power 'x 5))
+  (println (make-power 5 'x))
+  (println (make-power 'x 'y))
+  (println "Natural Logarithm Test")
+  (println (make-ln 0))
+  (println (make-ln 1))
+  (println (make-ln 5))
+  (println (make-ln -1))
+  (println (make-ln 'x))
+  (println (make-ln 'y))
+  (println (derivative '(+ (* x x) 5) 'x))
+  )
