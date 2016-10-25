@@ -56,14 +56,28 @@
 (defn augend [sum]
   (third sum))
 
+;; OLD VERSION
+;; True if the form represents a difference.
+;(defn diff? [form]
+;  (and (list? form) (= '- (first form))))
+
 ;; True if the form represents a difference.
 (defn diff? [form]
-  (and (list? form) (= '- (first form))))
+  (and (list? form) (= '- (second form))))
 
 ;; OLD VERSION
 ;; Constructs a difference of a and b.
 ;(defn make-diff [a b]
 ;  (list '- a b))
+
+;; OLD VERSION 2
+;; Constructs a difference of a and b.
+;(defn make-diff [a b]
+;  (cond
+;    (= a 0) (list '- b)
+;    (= b 0) a
+;    (and (number? a) (number? b)) (- a b)
+;    :else (list '- a b)))
 
 ;; Constructs a difference of a and b.
 (defn make-diff [a b]
@@ -71,11 +85,16 @@
     (= a 0) (list '- b)
     (= b 0) a
     (and (number? a) (number? b)) (- a b)
-    :else (list '- a b)))
+    :else (list a '- b)))
+
+;; OLD VERSION
+;; Selects the subtrahend (first value) of a difference.
+;(defn subtrahend [diff]
+;  (second diff))
 
 ;; Selects the subtrahend (first value) of a difference.
 (defn subtrahend [diff]
-  (second diff))
+  (first diff))
 
 ;; Selects the minuend (second value) of a difference.
 (defn minuend [diff]
@@ -131,12 +150,26 @@
 
 ;; True if the form represents a quotient.
 (defn quot? [form]
-  (and (list? form) (= '/ (first form))))
+  (and (list? form) (= '/ (second form))))
+
+;; OLD VERSION
+;; True if the form represents a quotient.
+;(defn quot? [form]
+;  (and (list? form) (= '/ (first form))))
 
 ;; OLD VERSION
 ;; Constructs a quotient of a and b.
 ;(defn make-quot [a b]
 ;  (list '/ a b))
+
+;; OLD VERSION 2
+;; Constructs a quotient of a and b.
+;(defn make-quot [a b]
+;  (cond
+;    (= a 0) 0
+;    (= b 1) a
+;    (and (number? a) (number? b)) (/ a b)
+;    :else (list '/ a b)))
 
 ;; Constructs a quotient of a and b.
 (defn make-quot [a b]
@@ -144,24 +177,43 @@
     (= a 0) 0
     (= b 1) a
     (and (number? a) (number? b)) (/ a b)
-    :else (list '/ a b)))
+    :else (list a '/ b)))
+
+;; OLD VERSION
+;; Selects the dividend (first value) of a quotient.
+;(defn dividend [quot]
+;  (second quot))
 
 ;; Selects the dividend (first value) of a quotient.
 (defn dividend [quot]
-  (second quot))
+  (first quot))
 
 ;; Selects the divisor (second value) of a quotient.
 (defn divisor [quot]
   (third quot))
 
+;; OLD VERSION
+;; True if the form represents a power.
+;(defn power? [form]
+;  (and (list? form) (= '** (first form))))
+
 ;; True if the form represents a power.
 (defn power? [form]
-  (and (list? form) (= '** (first form))))
+  (and (list? form) (= '** (second form))))
 
 ;; OLD VERSION
 ;; Constructs a power of a and b.
 ;(defn make-power [a b]
 ;  (list '** a b))
+
+;; OLD VERSION 2
+;; Constructs a power of a and b.
+;(defn make-power [a b]
+;  (cond
+;    (= b 0) 1
+;    (= b 1) a
+;    (and (number? a) (number? b)) (Math/pow a b)
+;    :else (list '** a b)))
 
 ;; Constructs a power of a and b.
 (defn make-power [a b]
@@ -169,11 +221,16 @@
     (= b 0) 1
     (= b 1) a
     (and (number? a) (number? b)) (Math/pow a b)
-    :else (list '** a b)))
+    :else (list a '** b)))
+
+;; OLD VERSION
+;; Selects the base (first value) of a power.
+;(defn base [power]
+;  (second power))
 
 ;; Selects the base (first value) of a power.
 (defn base [power]
-  (second power))
+  (first power))
 
 ;; Selects the exponent (second value) of a power.
 (defn exponent [power]
@@ -197,22 +254,6 @@
 ;; Selects the antilogarithm of a logarithm.
 (defn log-of [antilog]
   (second antilog))
-
-;; True if the form represents an exponential.
-(defn exp? [form]
-  (and (list? form) (= 'exp (first form))))
-
-;; Constructs an exponential of a and b.
-(defn make-exp [a b]
-  (list 'exp a b))
-
-;; Selects the base (first value) of an exponential.
-(defn exp-base [exp]
-  (second exp))
-
-;; Selects the exponent (second value) of an exponential.
-(defn exp-exponent [exp]
-  (third exp))
 
 ;; True if the form represents a sin.
 (defn sin? [form]
@@ -266,6 +307,23 @@
 (defn angle [trig]
   (second trig))
 
+;; OLD VERSION
+;; True if the form represents an exponential.
+;(defn exp? [exp]
+;  (and (list? exp) (= 'exp (first exp))))
+
+;; True if the form represents an exponential.
+(defn exp? [exp]
+  (and (list? exp) (= 'exp (second exp))))
+
+;; OLD VERSION
+;; Constructs an exponential of a and b.
+;(defn make-exp [a b]
+;  (list 'exp a b))
+
+;; Constructs an exponential of a and b.
+(defn make-exp [a b]
+  (list a 'exp b))
 
 
 ;; Returns the derivative of a function expressed in Clojure notation, where variables are quoted.
@@ -288,7 +346,7 @@
                                       (multiplicand form)))
     ; Power rule
     (power? form) (make-prod (make-prod (exponent form)
-                                        (make-power (base form) (- (exponent form) 1)))
+                                        (make-power (base form) (make-diff (exponent form) 1)))
                              (derivative (base form) var))
     ; Quotient rule
     (quot? form) (make-quot (make-diff (make-prod (divisor form) (derivative (dividend form) var))
@@ -311,11 +369,13 @@
     ; Cot
     (cot? form) (make-prod -1 (make-prod (make-power (make-csc (angle form)) 2) (derivative (angle form) var)))
     ; Exp
-    (exp? form) (make-prod (make-prod (make-exp (exp-base form) (exp-exponent form)) (make-ln (exp-base form)))
-                           (derivative (exp-exponent form) var))))
+    (exp? form) (make-prod (make-prod form ; OR, we can use: (make-exp (base form) (exponent form))
+                                      (make-ln (base form)))
+                           (derivative (exponent form) var))))
 
 (defn -main
   [& args]
-  (println (derivative '(- (5 * x) y) 'x))
-  (println (derivative '(** (ln ((** x 2) + 1)) 5) 'x))
-  (println (derivative '(/ (5 * (sin x)) (cos x)) 'x)))
+  (println (derivative '((5 * x) - y) 'x))
+  (println (derivative '((ln ((x ** 2) + 1)) ** 5) 'x))
+  (println (derivative '((5 * (sin x)) / (cos x)) 'x))
+  (println (derivative '(5 * (y exp x)) 'x)))
