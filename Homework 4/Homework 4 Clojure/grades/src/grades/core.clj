@@ -37,7 +37,8 @@
 
 (defn -main
   [& args]
-  (println (filter #(.startsWith % "CECS") (map course-name ada-courses)))
+  (println (filter #(.startsWith % "CECS") (map course-name ada-courses))) ; Provides only course names.
+  (println (filter #(.startsWith (course-name %) "CECS") ada-courses)) ; Provides course names, grades, and units.
 
   (println (reduce + (map course-units ada-courses)))
 
