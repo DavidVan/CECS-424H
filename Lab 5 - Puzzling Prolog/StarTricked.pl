@@ -25,14 +25,20 @@ solve :-
     % 1. Mr. Klatu made his sighting at some point earlier in the week than the other who saw the balloon, but at some point later in the week than the one who spotted the Frisbee (who isn't Ms. Gort).
     \+ member([_, mr_klatu, balloon], Triples),
     \+ member([_, mr_klatu, frisbee], Triples),
-    earlier(_, _),
+    \+ member([_, ms_gort, frisbee], Triples),
+    member([Balloon_Day, _, balloon], Triples),
+    member([Frisbee_Day, _, frisbee], Triples),
+    member([Mr_Klatu_Day, mr_klatu, _], Triples),
+    earlier(Mr_Klatu_Day, Balloon_Day),
+    \+ earlier(Mr_Klatu_Day, Frisbee_Day),
+
 
     % 2. Friday's sighting was made by either Ms. Barrada or the one who saw a clothesline (or both).
     (member([friday, ms_barrada, _], Triples);
     member([friday, _, clothesline], Triples)),
 
     % 3. Mr. Nikto did not make his sighting on Tuesday.
-    \+ member([tueday, mr_nikto, _], Triples),
+    \+ member([tuesday, mr_nikto, _], Triples),
 
     % 4. Mr. Klatu isn't the one whose object turned out to be a water tower.
     \+ member([_, mr_klatu, water_tower], Triples),
