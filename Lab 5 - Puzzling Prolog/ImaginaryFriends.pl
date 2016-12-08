@@ -32,7 +32,7 @@ solve :-
     \+ member([joanne, grizzly_bear, _], Triples),
     member([joanne, _, circus], Triples),
 
-    % 3. Winnie's imaginary friend is a zebra
+    % 3. Winnie's imaginary friend is a zebra.
     member([winnie, zebra, _], Triples),
 
     % 4. The grizzly bear didn't board the spaceship to the moon.
