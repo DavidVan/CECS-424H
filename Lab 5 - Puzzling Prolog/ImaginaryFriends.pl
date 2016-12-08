@@ -9,7 +9,8 @@ adventure(spaceship).
 adventure(train).
 
 solve :-
-    imaginary_friend(JoanneImaginaryFriend), imaginary_friend(LouImaginaryFriend), imaginary_friend(RalphImaginaryFriend), imaginary_friend(WinnieImaginaryFriend),
+    imaginary_friend(JoanneImaginaryFriend), imaginary_friend(LouImaginaryFriend),
+    imaginary_friend(RalphImaginaryFriend), imaginary_friend(WinnieImaginaryFriend),
     all_different([JoanneImaginaryFriend, LouImaginaryFriend, RalphImaginaryFriend, WinnieImaginaryFriend]),
 
     adventure(JoanneAdventure), adventure(LouAdventure),
